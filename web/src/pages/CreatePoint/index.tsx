@@ -5,6 +5,7 @@ import { Map, TileLayer, Marker } from "react-leaflet";
 import { LeafletMouseEvent } from 'leaflet'
 import api from "../../services/api";
 import axios from "axios";
+import Alert from './Alert'
 
 import logo from "../../assets/logo.svg";
 
@@ -28,6 +29,7 @@ const CreatePoint = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [ufs, setUfs] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState<boolean>(false)
 
   const [initialPosition, setInitialdPosition] = useState<[number, number]>([0, 0])
 
@@ -143,14 +145,21 @@ const CreatePoint = () => {
       items
     }
 
-    await api.post('points', data)
+    const response = await api.post('points', data)
 
-    alert('Ponto de coleta criado!')
+    if (response.status === 200) {
+      setSubmitted(true)
 
-    history.push('/')
+      setTimeout(() => {
+        setSubmitted(false)
+        history.push('/')
+      }, 3000)
+    }
   }
 
   return (
+    <>
+    { submitted && <Alert /> }
     <div id="page-create-point">
       <header>
         <img src={logo} alt="Ecoleta" />
@@ -253,6 +262,7 @@ const CreatePoint = () => {
         <button type="submit">Cadastrar ponto de coleta</button>
       </form>
     </div>
+    </>
   );
 };
 
