@@ -11,6 +11,9 @@ mobile/*.orig.*
 mobile/web-build/
 mobile/web-report/
 
+server/uploads/*
+!server/uploads/.gitkeep
+
 # macOS
 mobile/.DS_Store
 
